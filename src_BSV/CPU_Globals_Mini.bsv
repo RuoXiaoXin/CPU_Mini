@@ -21,30 +21,27 @@ typedef struct
     WordXL            rs2_val;
 } Data_ID_EX deriving (Bits,FShow);
 
+typedef enum
+{
+    //除了LD，ST都选择这个
+    OP_StageMEM_ALU;//写RF，无MEM
+    OP_StageMEM_LD;//写RF，读MEM
+    OP_StageMEM_ST;//写MEM
+} OP_StageMEM deriving (Bits,FShow,Eq);
+
 typedef struct
 {
-    WordXL  result;//ALU OUT
-    
-    Bool    write_mem;
-    Addr    mem_addr;
-    WordXL  mem_val;
-
-    Bool    write_reg;
-    RegName rd;
-    WordXL  rd_val;
-
+    Addr            pc;
+    OP_StageMEM     op_stageMEM;
+    WordXL          val;    //写入MEM的数据：来自于ALU，RF，Imm等
+    RegName         rd;
 } Data_EX_MEM deriving (Bits,FShow);
 
 typedef struct
-{   Bool    write_reg;
+{
+    Bool    rd_valid;
     RegName rd;
     WordXL  rd_val;
 } Data_MEM_WB deriving (Bits,FShow);
-
-typedef struct 
-{
-    RegName rd;
-    WordXL  rd_val;
-} Data_WB deriving (Bits,FShow);
 
 endpackage

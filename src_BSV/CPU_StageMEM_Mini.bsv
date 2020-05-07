@@ -20,9 +20,18 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
         dmem[i] <- mkReg(0);
     
     method Action run(Data_EX_MEM data_ex_mem);
+
+        let pc = data_ex_mem.pc;
         let rd = data_ex_mem.rd;
-        let rd_val = data_ex_mem.result;
-        reg_mem_wb <= Data_MEM_WB{write_reg:True,rd:rd,rd_val:rd_val};
+        let val = data_ex_mem.val;
+        let op_stageMEM = data_ex_mem.op_stageMEM;
+
+        let rd_valid = (op_stageMEM==OP_StageMEM_ST) ? 0:1;
+
+        reg_mem_wb <= Data_MEM_WB{rd_valid:rd_valid,
+                                  rd:rd,
+                                  rd_val:val};
+
     endmethod
 
     method Data_MEM_WB out;

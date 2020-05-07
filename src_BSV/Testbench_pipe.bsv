@@ -1,5 +1,6 @@
 package Testbench_pipe;
 
+import CPU_RegFile_Mini ::*;
 import CPU_Globals_Mini ::*;
 import CPU_StageIF_Mini ::*;
 import CPU_StageID_Mini ::*;
@@ -9,21 +10,19 @@ import CPU_StageWB_Mini ::*;
 
 module mkTestbench_pipe(Empty);
 
+    CPU_RegFile_IFC regfile <- mkCPU_RegFile;
+
     CPU_PC_IFC       s0 <- mkCPU_PC;
     CPU_StageIF_IFC  s1 <- mkCPU_StageIF;
-    CPU_StageID_IFC  s2 <- mkCPU_StageID;
+    CPU_StageID_IFC  s2 <- mkCPU_StageID(regfile);
     CPU_StageEX_IFC  s3 <- mkCPU_StageEX;
     CPU_StageMEM_IFC s4 <- mkCPU_StageMEM;
-    CPU_StageWB_IFC  s5 <- mkCPU_StageWB;
+    CPU_StageWB_IFC  s5 <- mkCPU_StageWB(regfile);
 
     Reg #(UInt#(32)) step <- mkReg(0);
 
     /*测试指令：
     Add x1,x1,x1：1+1=2
-    Add x2,x2,x2: 2+2=4
-    Add x3,x3,x3: 3+3=6
-    Add x4,x4,x4: 4+4=8
-    Add x5,x5,x5: 5+5=10
     */
     // (0,32'b0000000_00001_00001_000_00001_0110011);
     // (1,32'b0000000_00010_00010_000_00010_0110011);
@@ -57,21 +56,16 @@ module mkTestbench_pipe(Empty);
         s3.run(s2.out);
 
         $display("4:mem");
-        $display("result from ALU:%0d",s3.out.result);
+        $display("result from ALU:%0d",s3.out.val);
         s4.run(s3.out);
 
         $display("5:write back");
-        let rd = s5.out(s4.out).rd;
-        let rd_val = s5.out(s4.out).rd_val;
-        s2.write_regfile(rd,rd_val);
 
         step <= step + 1;
 
-        s2.temp_readReg(1);
-
     endrule
 
-    rule done(step==11);
+    rule done(step==100);
         $finish;
     endrule
 
