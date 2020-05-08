@@ -1,5 +1,5 @@
 package Testbench;
-//test
+//这个测试了：因为Rule分散开了，因此实际是单周期的，不能流水。
 
 import CPU_Globals_Mini ::*;
 import CPU_StageIF_Mini ::*;

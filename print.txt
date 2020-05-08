@@ -1,0 +1,485 @@
+**************************************************************************
+0:init
+finish init
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000000000
+IF Module:pc is 00000000000000000000000000000000
+2:decode
+instr:10101010101010101010101010101010
+ID Module:read RF,rs1 is 21,rs2 is 10
+3:execute
+rs1_val:2863311530   rs2_val:10
+4:mem
+result from ALU:2863311530
+MEM Module:rd_valid is 1 rd_val is 2863311530
+5:write back
+rd_valid is 1
+RegFile:write 1431655765 in 10
+WB Module:write 1431655765 in 10
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000000001
+IF Module:pc is 00000000000000000000000000000001
+2:decode
+instr:00000000000100001000000010110011
+ID Module:read RF,rs1 is 1,rs2 is 1
+3:execute
+rs1_val:2863311530   rs2_val:2863311530
+4:mem
+result from ALU:10
+MEM Module:rd_valid is 1 rd_val is 10
+5:write back
+rd_valid is 1
+RegFile:write 2863311530 in 10
+WB Module:write 2863311530 in 10
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000000010
+IF Module:pc is 00000000000000000000000000000010
+2:decode
+instr:00000000001000010000000100110011
+ID Module:read RF,rs1 is 2,rs2 is 2
+3:execute
+rs1_val:1   rs2_val:1
+4:mem
+result from ALU:2863311530
+MEM Module:rd_valid is 1 rd_val is 2863311530
+5:write back
+rd_valid is 1
+RegFile:write 10 in 21
+WB Module:write 10 in 21
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000000011
+IF Module:pc is 00000000000000000000000000000011
+2:decode
+instr:00000000001100011000000110110011
+ID Module:read RF,rs1 is 3,rs2 is 3
+3:execute
+rs1_val:2   rs2_val:2
+4:mem
+result from ALU:2
+MEM Module:rd_valid is 1 rd_val is 2
+5:write back
+rd_valid is 1
+RegFile:write 2863311530 in 21
+WB Module:write 2863311530 in 21
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000000100
+IF Module:pc is 00000000000000000000000000000100
+2:decode
+instr:00000000010000100000001000110011
+ID Module:read RF,rs1 is 4,rs2 is 4
+3:execute
+rs1_val:3   rs2_val:3
+4:mem
+result from ALU:4
+MEM Module:rd_valid is 1 rd_val is 4
+5:write back
+rd_valid is 1
+RegFile:write 2 in 1
+WB Module:write 2 in 1
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000000101
+IF Module:pc is 00000000000000000000000000000101
+2:decode
+instr:00000000010100101000001010110011
+ID Module:read RF,rs1 is 5,rs2 is 5
+3:execute
+rs1_val:4   rs2_val:4
+4:mem
+result from ALU:6
+MEM Module:rd_valid is 1 rd_val is 6
+5:write back
+rd_valid is 1
+RegFile:write 4 in 2
+WB Module:write 4 in 2
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000000110
+IF Module:pc is 00000000000000000000000000000110
+2:decode
+instr:00000000000100001000000010110011
+ID Module:read RF,rs1 is 1,rs2 is 1
+3:execute
+rs1_val:5   rs2_val:5
+4:mem
+result from ALU:8
+MEM Module:rd_valid is 1 rd_val is 8
+5:write back
+rd_valid is 1
+RegFile:write 6 in 3
+WB Module:write 6 in 3
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000000111
+IF Module:pc is 00000000000000000000000000000111
+2:decode
+instr:00000000001000010000000100110011
+ID Module:read RF,rs1 is 2,rs2 is 2
+3:execute
+rs1_val:2   rs2_val:2
+4:mem
+result from ALU:10
+MEM Module:rd_valid is 1 rd_val is 10
+5:write back
+rd_valid is 1
+RegFile:write 8 in 4
+WB Module:write 8 in 4
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000001000
+IF Module:pc is 00000000000000000000000000001000
+2:decode
+instr:00000000001100011000000110110011
+ID Module:read RF,rs1 is 3,rs2 is 3
+3:execute
+rs1_val:4   rs2_val:4
+4:mem
+result from ALU:4
+MEM Module:rd_valid is 1 rd_val is 4
+5:write back
+rd_valid is 1
+RegFile:write 10 in 5
+WB Module:write 10 in 5
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000001001
+IF Module:pc is 00000000000000000000000000001001
+2:decode
+instr:00000000010000100000001000110011
+ID Module:read RF,rs1 is 4,rs2 is 4
+3:execute
+rs1_val:6   rs2_val:6
+4:mem
+result from ALU:8
+MEM Module:rd_valid is 1 rd_val is 8
+5:write back
+rd_valid is 1
+RegFile:write 4 in 1
+WB Module:write 4 in 1
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000001010
+IF Module:pc is 00000000000000000000000000001010
+2:decode
+instr:00000000010100101000001010110011
+ID Module:read RF,rs1 is 5,rs2 is 5
+3:execute
+rs1_val:8   rs2_val:8
+4:mem
+result from ALU:12
+MEM Module:rd_valid is 1 rd_val is 12
+5:write back
+rd_valid is 1
+RegFile:write 8 in 2
+WB Module:write 8 in 2
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000001011
+IF Module:pc is 00000000000000000000000000001011
+2:decode
+instr:00000000000100001000000010110011
+ID Module:read RF,rs1 is 1,rs2 is 1
+3:execute
+rs1_val:10   rs2_val:10
+4:mem
+result from ALU:16
+MEM Module:rd_valid is 1 rd_val is 16
+5:write back
+rd_valid is 1
+RegFile:write 12 in 3
+WB Module:write 12 in 3
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000001100
+IF Module:pc is 00000000000000000000000000001100
+2:decode
+instr:00000000001000010000000100110011
+ID Module:read RF,rs1 is 2,rs2 is 2
+3:execute
+rs1_val:4   rs2_val:4
+4:mem
+result from ALU:20
+MEM Module:rd_valid is 1 rd_val is 20
+5:write back
+rd_valid is 1
+RegFile:write 16 in 4
+WB Module:write 16 in 4
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000001101
+IF Module:pc is 00000000000000000000000000001101
+2:decode
+instr:00000000001100011000000110110011
+ID Module:read RF,rs1 is 3,rs2 is 3
+3:execute
+rs1_val:8   rs2_val:8
+4:mem
+result from ALU:8
+MEM Module:rd_valid is 1 rd_val is 8
+5:write back
+rd_valid is 1
+RegFile:write 20 in 5
+WB Module:write 20 in 5
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000001110
+IF Module:pc is 00000000000000000000000000001110
+2:decode
+instr:00000000010000100000001000110011
+ID Module:read RF,rs1 is 4,rs2 is 4
+3:execute
+rs1_val:12   rs2_val:12
+4:mem
+result from ALU:16
+MEM Module:rd_valid is 1 rd_val is 16
+5:write back
+rd_valid is 1
+RegFile:write 8 in 1
+WB Module:write 8 in 1
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000001111
+IF Module:pc is 00000000000000000000000000001111
+2:decode
+instr:00000000010100101000001010110011
+ID Module:read RF,rs1 is 5,rs2 is 5
+3:execute
+rs1_val:16   rs2_val:16
+4:mem
+result from ALU:24
+MEM Module:rd_valid is 1 rd_val is 24
+5:write back
+rd_valid is 1
+RegFile:write 16 in 2
+WB Module:write 16 in 2
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000010000
+IF Module:pc is 00000000000000000000000000010000
+2:decode
+instr:00000000000100001000000010110011
+ID Module:read RF,rs1 is 1,rs2 is 1
+3:execute
+rs1_val:20   rs2_val:20
+4:mem
+result from ALU:32
+MEM Module:rd_valid is 1 rd_val is 32
+5:write back
+rd_valid is 1
+RegFile:write 24 in 3
+WB Module:write 24 in 3
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000010001
+IF Module:pc is 00000000000000000000000000010001
+2:decode
+instr:00000000001000010000000100110011
+ID Module:read RF,rs1 is 2,rs2 is 2
+3:execute
+rs1_val:8   rs2_val:8
+4:mem
+result from ALU:40
+MEM Module:rd_valid is 1 rd_val is 40
+5:write back
+rd_valid is 1
+RegFile:write 32 in 4
+WB Module:write 32 in 4
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000010010
+IF Module:pc is 00000000000000000000000000010010
+2:decode
+instr:00000000001100011000000110110011
+ID Module:read RF,rs1 is 3,rs2 is 3
+3:execute
+rs1_val:16   rs2_val:16
+4:mem
+result from ALU:16
+MEM Module:rd_valid is 1 rd_val is 16
+5:write back
+rd_valid is 1
+RegFile:write 40 in 5
+WB Module:write 40 in 5
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000010011
+IF Module:pc is 00000000000000000000000000010011
+2:decode
+instr:00000000010000100000001000110011
+ID Module:read RF,rs1 is 4,rs2 is 4
+3:execute
+rs1_val:24   rs2_val:24
+4:mem
+result from ALU:32
+MEM Module:rd_valid is 1 rd_val is 32
+5:write back
+rd_valid is 1
+RegFile:write 16 in 1
+WB Module:write 16 in 1
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000010100
+IF Module:pc is 00000000000000000000000000010100
+2:decode
+instr:00000000010100101000001010110011
+ID Module:read RF,rs1 is 5,rs2 is 5
+3:execute
+rs1_val:32   rs2_val:32
+4:mem
+result from ALU:48
+MEM Module:rd_valid is 1 rd_val is 48
+5:write back
+rd_valid is 1
+RegFile:write 32 in 2
+WB Module:write 32 in 2
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000010101
+IF Module:pc is 00000000000000000000000000010101
+2:decode
+instr:00000000000100001000000010110011
+ID Module:read RF,rs1 is 1,rs2 is 1
+3:execute
+rs1_val:40   rs2_val:40
+4:mem
+result from ALU:64
+MEM Module:rd_valid is 1 rd_val is 64
+5:write back
+rd_valid is 1
+RegFile:write 48 in 3
+WB Module:write 48 in 3
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000010110
+IF Module:pc is 00000000000000000000000000010110
+2:decode
+instr:00000000001000010000000100110011
+ID Module:read RF,rs1 is 2,rs2 is 2
+3:execute
+rs1_val:16   rs2_val:16
+4:mem
+result from ALU:80
+MEM Module:rd_valid is 1 rd_val is 80
+5:write back
+rd_valid is 1
+RegFile:write 64 in 4
+WB Module:write 64 in 4
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000010111
+IF Module:pc is 00000000000000000000000000010111
+2:decode
+instr:00000000001100011000000110110011
+ID Module:read RF,rs1 is 3,rs2 is 3
+3:execute
+rs1_val:32   rs2_val:32
+4:mem
+result from ALU:32
+MEM Module:rd_valid is 1 rd_val is 32
+5:write back
+rd_valid is 1
+RegFile:write 80 in 5
+WB Module:write 80 in 5
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000011000
+IF Module:pc is 00000000000000000000000000011000
+2:decode
+instr:00000000010000100000001000110011
+ID Module:read RF,rs1 is 4,rs2 is 4
+3:execute
+rs1_val:48   rs2_val:48
+4:mem
+result from ALU:64
+MEM Module:rd_valid is 1 rd_val is 64
+5:write back
+rd_valid is 1
+RegFile:write 32 in 1
+WB Module:write 32 in 1
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000011001
+IF Module:pc is 00000000000000000000000000011001
+2:decode
+instr:00000000010100101000001010110011
+ID Module:read RF,rs1 is 5,rs2 is 5
+3:execute
+rs1_val:64   rs2_val:64
+4:mem
+result from ALU:96
+MEM Module:rd_valid is 1 rd_val is 96
+5:write back
+rd_valid is 1
+RegFile:write 64 in 2
+WB Module:write 64 in 2
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000011010
+IF Module:pc is 00000000000000000000000000011010
+2:decode
+instr:00000000000100001000000010110011
+ID Module:read RF,rs1 is 1,rs2 is 1
+3:execute
+rs1_val:80   rs2_val:80
+4:mem
+result from ALU:128
+MEM Module:rd_valid is 1 rd_val is 128
+5:write back
+rd_valid is 1
+RegFile:write 96 in 3
+WB Module:write 96 in 3
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000011011
+IF Module:pc is 00000000000000000000000000011011
+2:decode
+instr:00000000001000010000000100110011
+ID Module:read RF,rs1 is 2,rs2 is 2
+3:execute
+rs1_val:32   rs2_val:32
+4:mem
+result from ALU:160
+MEM Module:rd_valid is 1 rd_val is 160
+5:write back
+rd_valid is 1
+RegFile:write 128 in 4
+WB Module:write 128 in 4
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000011100
+IF Module:pc is 00000000000000000000000000011100
+2:decode
+instr:00000000001100011000000110110011
+ID Module:read RF,rs1 is 3,rs2 is 3
+3:execute
+rs1_val:64   rs2_val:64
+4:mem
+result from ALU:64
+MEM Module:rd_valid is 1 rd_val is 64
+5:write back
+rd_valid is 1
+RegFile:write 160 in 5
+WB Module:write 160 in 5
+**************************************************************************
+1:fetch
+pc:00000000000000000000000000011101
+IF Module:pc is 00000000000000000000000000011101
+2:decode
+instr:00000000010000100000001000110011
+ID Module:read RF,rs1 is 4,rs2 is 4
+3:execute
+rs1_val:96   rs2_val:96
+4:mem
+result from ALU:128
+MEM Module:rd_valid is 1 rd_val is 128
+5:write back
+rd_valid is 1
+RegFile:write 64 in 1
+WB Module:write 64 in 1
+        64
+Bluesim simulation finished

@@ -8,7 +8,6 @@ interface CPU_StageMEM_IFC;
     method Data_MEM_WB out();
 endinterface
 
-(*synthesize*)
 module mkCPU_StageMEM(CPU_StageMEM_IFC);
     
     Reg #(Data_MEM_WB) reg_mem_wb <- mkRegU;
@@ -26,8 +25,9 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
         let val = data_ex_mem.val;
         let op_stageMEM = data_ex_mem.op_stageMEM;
 
-        let rd_valid = (op_stageMEM==OP_StageMEM_ST) ? 0:1;
+        Bool rd_valid = (op_stageMEM==OP_StageMEM_ST) ? False:True;
 
+        $display("MEM Module:rd_valid is ",rd_valid," rd_val is %0d",val);
         reg_mem_wb <= Data_MEM_WB{rd_valid:rd_valid,
                                   rd:rd,
                                   rd_val:val};

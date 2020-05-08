@@ -1,5 +1,5 @@
 package Testbench_pipe;
-
+//目前最新的
 import CPU_RegFile_Mini ::*;
 import CPU_Globals_Mini ::*;
 import CPU_StageIF_Mini ::*;
@@ -60,12 +60,13 @@ module mkTestbench_pipe(Empty);
         s4.run(s3.out);
 
         $display("5:write back");
+        s5.run(s4.out);
 
         step <= step + 1;
 
     endrule
 
-    rule done(step==100);
+    rule done(step==31);
         $finish;
     endrule
 

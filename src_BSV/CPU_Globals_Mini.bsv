@@ -24,9 +24,9 @@ typedef struct
 typedef enum
 {
     //除了LD，ST都选择这个
-    OP_StageMEM_ALU;//写RF，无MEM
-    OP_StageMEM_LD;//写RF，读MEM
-    OP_StageMEM_ST;//写MEM
+    OP_StageMEM_ALU,//写RF，无MEM
+    OP_StageMEM_LD,//写RF，读MEM
+    OP_StageMEM_ST//写MEM
 } OP_StageMEM deriving (Bits,FShow,Eq);
 
 typedef struct

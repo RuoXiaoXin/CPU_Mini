@@ -9,8 +9,8 @@ VSIM ?= iverilog
 
 # ================================================================
 # You should not have to change anything below this line
-TOPFILE   ?= src_BSV/Testbench_regfile.bsv
-TOPMODULE ?= mkTestbench_regfile
+TOPFILE   ?= src_BSV/Testbench_pipe.bsv
+TOPMODULE ?= mkTestbench_pipe
 
 BSC_COMP_FLAGS = -elab -keep-fires -aggressive-conditions -no-warn-action-shadowing
 BSC_LINK_FLAGS = -keep-fires
