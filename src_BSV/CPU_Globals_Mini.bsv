@@ -2,9 +2,8 @@ package CPU_Globals_Mini;
 
 import ISA_Decls_Mini ::*;
 
-//暂时使用Index作为imem的索引，因为现在是寄存器数组实现的imem
-typedef Bit#(5) Index;
-Integer imemSize = 1024;
+
+// Integer imemSize = 1024;
 Integer dmemSize = 1024;
 
 typedef struct 
@@ -32,8 +31,10 @@ typedef enum
 typedef struct
 {
     Addr            pc;
+    Bit#(3)         f3;     //仅仅用于LoadStore指令
     OP_StageMEM     op_stageMEM;
     WordXL          val;    //写入MEM的数据：来自于ALU，RF，Imm等
+    WordXL          addr;   //Store指令要用的地址
     RegName         rd;
 } Data_EX_MEM deriving (Bits,FShow);
 

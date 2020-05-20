@@ -1,5 +1,7 @@
 package CPU_StageIF_Mini;
 
+import RegFile ::*;
+
 import ISA_Decls_Mini ::*;
 import CPU_Globals_Mini ::*;
 
@@ -36,15 +38,16 @@ endmodule
 
 module mkCPU_StageIF(CPU_StageIF_IFC);
 
-    Reg #(Instr) imem[imemSize];
-    for(Integer i=0;i<imemSize;i=i+1)
-        imem[i] <- mkRegU;
+    //指令存储器
+    //这样是IM按字寻址，不能字节寻址，PC+1
+    RegFile #(Addr,Instr) imem <- mkRegFileFullLoad("imem_store.txt");
 
     Reg #(Data_IF_ID) reg_if_id <- mkRegU;
 
     //*************************init**********************
 
     /*Add x1,x1,x1五条指令，均是这个1+1,2+2,4+4,8+8,16+16*/
+    /*
     method Action init;
         writeReg(imem[0],32'b0000000_00001_00001_000_00001_0110011);
         writeReg(imem[1],32'b0000000_00010_00010_000_00010_0110011);
@@ -82,11 +85,12 @@ module mkCPU_StageIF(CPU_StageIF_IFC);
         writeReg(imem[28],32'b0000000_00100_00100_000_00100_0110011);
         writeReg(imem[29],32'b0000000_00101_00101_000_00101_0110011);
     endmethod
+    */
 
     //*************************本模块***********************
 
     method Action run(Addr pc);
-        let instr = imem[pc];
+        let instr = imem.sub(pc);
         reg_if_id <= Data_IF_ID{pc:pc,instr:instr};
         $display("IF Module:pc is %b",pc);
     endmethod

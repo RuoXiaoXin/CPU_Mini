@@ -1,36 +1,45 @@
-// package CPU_Memory_Mini;
+package CPU_Memory_Mini;
 
-// import ISA_Decls_Mini ::*;
-// import BRAMCore ::*;
-// // import CPU_Globals_Mini::*;
-// //interface BRAM_PORT_BE#(type addr, type data, numeric type n);
-// // method Action put(Bool write, addr address, data datain);
-// // method data read();
-// //参数n不太清楚，但是只能取4,8,32？？？
-// //参数BOOL不确定？？？
+import Memory ::*;
+import RegFile ::*;
+import GetPut ::*;
+import ClientServer::*;
+import ISA_Decls_Mini ::*;
 
-// //IM
-// Integer imemSize = 1024;
-// typedef BRAM_PORT#(Addr,Instr) CPU_IM_IFC;
-// //DM
-// Integer dmemSize = 1024;
-// typedef BRAM_PORT_BE#(Addr,WordXL,8) CPU_DM_IFC;
+//先写数据存储，验证了再补充指令存储器
+//DM
+Integer dmemSize = 'h0008_0000;
 
+typedef 32 Addr_Width;
+typedef 32 Data_Width;
 
-// module mkCPU_IM (CPU_IM_IFC);
+typedef MemoryServer#(Addr_Width,Data_Width) CPU_DMem_IFC;
 
-//     CPU_IM_IFC im <- mkBRAMCore1Load(imemSize,True,"imem.txt",True);
+module mkCPU_DMem (CPU_DMem_IFC);
 
-//     method Action put(Bool write, addr address, data datain);
+    RegFile#(Addr,WordXL) dmem <- mkRegFileLoad ("dmem.txt", 0, fromInteger (dmemSize - 1));
 
-//     method data read();
-     
-// endmodule
+    MemoryResponse#(Data_Width) rsp = ?;
+    MemoryRequest#(Addr_Width,Data_Width) req = ?;
 
+    rule rl;
+        let addr = req.address;
+        let data = req.data;
+        if(req.write==True) 
+        begin
+            dmem.upd(addr,data);
+            let rsp = MemoryResponse{data:?};
+            $display("dmem write,addr is %b,data is %0d",addr,data);
+        end else 
+        begin
+            let x = dmem.sub(addr);
+            let rsp = MemoryResponse{data:x};
+            $display("dmem read,addr is %b",addr);
+        end
+    endrule
 
-// module mkCPU_DM (CPU_DM_IFC);
+    interface Get response = toGet (rsp);
+    interface Put request  = toPut (req);
 
-//     CPU_DM_IFC dm <- mkBRAMCore1BELoad(dmemSize,True,"dmem.txt",False);
-
-// endmodule
-// endpackage
+endmodule
+endpackage

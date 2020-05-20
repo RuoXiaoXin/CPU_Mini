@@ -34,7 +34,7 @@ module mkTestbench_pipe(Empty);
     rule init(step==0);
         $display("**************************************************************************");
         $display("0:init");
-        s1.init;     
+        // s1.init;     
         s0.in(32'H0000_0000);
         step <= step + 1;
         $display("finish init");

@@ -29,10 +29,12 @@ function  RegName    instr_rs1      (Instr x); return x [19:15]; endfunction
 function  RegName    instr_rs2      (Instr x); return x [24:20]; endfunction
 function  CSR_Addr   instr_csr      (Instr x); return unpack(x [31:20]); endfunction
 
+//这个是ADDI或者LOAD指令的格式
 function  Bit #(12)  instr_I_imm12  (Instr x);
    return x [31:20];
 endfunction
 
+//这个是STORE指令的格式
 function  Bit #(12)  instr_S_imm12  (Instr x);
    return { x [31:25], x [11:7] };
 endfunction
@@ -117,10 +119,8 @@ Opcode op_LOAD = 7'b00_000_11;
 Bit #(3) f3_LB  = 3'b000;
 Bit #(3) f3_LH  = 3'b001;
 Bit #(3) f3_LW  = 3'b010;
-Bit #(3) f3_LD  = 3'b011;
 Bit #(3) f3_LBU = 3'b100;
 Bit #(3) f3_LHU = 3'b101;
-Bit #(3) f3_LWU = 3'b110;
 
 // ----------------
 // Store instructions
@@ -130,7 +130,6 @@ Opcode op_STORE = 7'b01_000_11;
 Bit #(3) f3_SB  = 3'b000;
 Bit #(3) f3_SH  = 3'b001;
 Bit #(3) f3_SW  = 3'b010;
-Bit #(3) f3_SD  = 3'b011;
 
 // ================================================================
 // Integer Register-Immediate Instructions

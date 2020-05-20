@@ -24,15 +24,21 @@ module mkCPU_StageEX(CPU_StageEX_IFC);
         let f3 = di.funct3;
         let f7 = di.funct7;
 
+        let imm12_I = di.imm12_I;
+        let imm12_S = di.imm12_S;
+
         IntXL rs1_val_s = unpack(rs1_val);
         IntXL rs2_val_s = unpack(rs2_val);
-        WordXL result = ?;
+        WordXL result = ?;//ALU计算的数据，或者，S型指令要存的数据
+        Addr addr = ?;//MEM访存的地址
 
-        //return value
-        Data_EX_MEM rv = Data_EX_MEM{pc:?,
+        //return value基本值，后面只需要改需要改的部分
+        Data_EX_MEM rv = Data_EX_MEM{pc:pc,
                              op_stageMEM:?,
+                             f3:f3, //仅用于Load和Store指令
                              val:?,
-                             rd:?};
+                             addr:?,
+                             rd:rd};
         
         if(op==op_OP)
         begin
@@ -49,12 +55,53 @@ module mkCPU_StageEX(CPU_StageEX_IFC);
             f10_AND  : result = rs1_val & rs2_val;
             endcase
 
-            rv = Data_EX_MEM{pc:pc,
-                            op_stageMEM:OP_StageMEM_ALU,
-                            val:result,
-                            rd:rd};
+            rv = Data_EX_MEM {  //pc:pc,
+                                //rd:rd,
+                                op_stageMEM : OP_StageMEM_ALU,
+                                val : result };
+    
+        end
+        else if(op==op_OP_IMM)
+        begin
+            case(f3)
+            f3_ADDI  : result = pack(rs1_val_s + unpack(signExtend(imm12_I)));
+            f3_SLLI  : result = pack(rs1_val_s << imm12_I[4:0]);
+            f3_SLTI  : result = (rs1_val_s < unpack(signExtend(imm12_I))) ? 1 : 0;
+            f3_SLTIU : result = (rs1_val < unpack(zeroExtend(imm12_I))) ? 1 : 0;
+            f3_XORI  : result = rs1_val ^ unpack(zeroExtend(imm12_I));
+            f3_SRxI  : begin 
+                        if(imm12_I[10]==1)//SRAI
+                            result = pack(rs1_val_s >> imm12_I[4:0]);
+                        else//SRLI
+                            result = pack(rs1_val >> imm12_I[4:0]);
+                        end
+            f3_ORI   : result = rs1_val | zeroExtend(imm12_I);
+            f3_ANDI  : result = rs1_val & zeroExtend(imm12_I);
+            endcase
+
+            rv = Data_EX_MEM {  //pc:pc,
+                                // rd:rd,
+                                op_stageMEM : OP_StageMEM_ALU,
+                                val : result };
 
         end
+        else if(op==op_LOAD)
+        begin
+            //地址值都是这么计算的
+            addr = pack(rs1_val_s + unpack(signExtend(imm12_I)));
+            rv = Data_EX_MEM { op_stageMEM : OP_StageMEM_LD,
+                               addr : addr };
+        end
+        else if(op==op_STORE)
+        begin
+            addr = pack(rs1_val_s + unpack(signExtend(imm12_S)));
+            rv = Data_EX_MEM { op_stageMEM : OP_StageMEM_ST,
+                               addr : addr,
+                               val  : rs2_val };
+        end
+        // else if(op==)//
+
+        
         return rv;
     
     endfunction
