@@ -56,7 +56,8 @@ module mkTestbench_pipe(Empty);
         s3.run(s2.out);
 
         $display("4:mem");
-        $display("result from ALU:%0d",s3.out.val);
+        $display("addr from ALU:%0d",s3.out.addr);
+        $display("val  from ALU:%0d",s3.out.val);
         s4.run(s3.out);
 
         $display("5:write back");

@@ -14,8 +14,13 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
     
     Reg #(Data_MEM_WB) reg_mem_wb <- mkRegU;
     
-    RegFile#(Addr,WordXL) dmem <- mkRegFileFullLoad("dmem.txt");
-    
+    //存储器，字节寻址，【3\2\1\0】表示【32-25\24-17\16-8\7-0】
+    //存储器里面的数据是：0000000F=15
+    RegFile#(Addr,Bit#(8)) dmem3 <- mkRegFileFullLoad("dmem3.txt");
+    RegFile#(Addr,Bit#(8)) dmem2 <- mkRegFileFullLoad("dmem2.txt");
+    RegFile#(Addr,Bit#(8)) dmem1 <- mkRegFileFullLoad("dmem1.txt");
+    RegFile#(Addr,Bit#(8)) dmem0 <- mkRegFileFullLoad("dmem0.txt");
+
     method Action run(Data_EX_MEM data_ex_mem);
 
         //接收EX级传过来的信息
@@ -25,7 +30,6 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
         let val  = data_ex_mem.val;
         let addr = data_ex_mem.addr;
         let op_stageMEM = data_ex_mem.op_stageMEM;
-    
 
         Data_MEM_WB rv = Data_MEM_WB { rd_valid:False,
                                        rd:rd,
@@ -39,23 +43,23 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
         begin
             case(f3)
             f3_LB : begin
-                        Bit#(8) load_data = truncate(dmem.sub(addr));
+                        let load_data = dmem0.sub(addr);
                         rv = Data_MEM_WB { rd_valid :True,rd_val:signExtend(load_data) };
                     end
             f3_LH : begin
-                        Bit#(16) load_data = truncate(dmem.sub(addr));
+                        let load_data = { dmem1.sub(addr),dmem0.sub(addr) };
                         rv = Data_MEM_WB { rd_valid :True,rd_val:signExtend(load_data) };
                     end
             f3_LW :begin
-                        WordXL load_data = dmem.sub(addr);
+                        let load_data = {dmem3.sub(addr),dmem2.sub(addr),dmem1.sub(addr),dmem0.sub(addr)};
                         rv = Data_MEM_WB { rd_valid:True,rd_val:load_data };
                     end
             f3_LBU: begin
-                        Bit#(8) load_data = truncate(dmem.sub(addr));
+                        let load_data = dmem0.sub(addr);
                         rv = Data_MEM_WB { rd_valid :True,rd_val:zeroExtend(load_data) };
                     end
             f3_LHU: begin
-                        Bit#(16) load_data = truncate(dmem.sub(addr));
+                        let load_data = { dmem1.sub(addr),dmem0.sub(addr) };
                         rv = Data_MEM_WB { rd_valid :True,rd_val:zeroExtend(load_data) };
                     end
             endcase
@@ -63,23 +67,32 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
         else if(op_stageMEM == OP_StageMEM_ST)
         begin
             case(f3)
-            f3_SB:  begin //先读再写，以后应该需要修改掉？？？
-                        Bit#(32) temp = dmem.sub(addr);
-                        let store_data = { temp[31:8], val[7:0] };
-                        dmem.upd(addr,store_data); 
+            f3_SB:  begin
+                        //这里得用地址做一下取余操作，判断是哪个字节数组的
+                        //dmem.upd(addr,val); 
+                        let temp = addr % 'd4;
+                        case(temp)
+                            0:dmem0.upd(addr,val[7:0]);
+                            1:dmem1.upd(addr,val[7:0]);
+                            2:dmem2.upd(addr,val[7:0]);
+                            3:dmem3.upd(addr,val[7:0]);
+                        endcase
                         rv = Data_MEM_WB { rd_valid:False };
-                        $display("store %0d in %0d",store_data,addr);
                     end                                                                      
             f3_SH:  begin
-                        Bit#(32) temp = dmem.sub(addr);
-                        let store_data = { temp[31:16] ,val[15:0] };
+                        let temp = addr % 'd2;
+                        case(temp)
+                            0:dmem0.upd(addr,val[7:0]);
+                            1:dmem1.upd(addr,val[15:8]);
+                        endcase
                         rv = Data_MEM_WB { rd_valid:False };
-                        $display("store %0d in %0d",store_data,addr);
                     end
             f3_SW: begin
-                        dmem.upd(addr,val);
+                        dmem0.upd(addr,val[7:0]);
+                        dmem1.upd(addr,val[15:8]);
+                        dmem2.upd(addr,val[23:16]);
+                        dmem3.upd(addr,val[31:24]);
                         rv = Data_MEM_WB { rd_valid:False };
-                        $display("store %0d in %0d",val,addr);
                     end
 
             endcase

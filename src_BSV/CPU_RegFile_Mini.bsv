@@ -8,6 +8,7 @@ import ISA_Decls_Mini :: *;
 interface CPU_RegFile_IFC;
    method WordXL read_rs1 (RegName rs1) ;
    method WordXL read_rs2 (RegName rs2) ;
+   method WordXL read_debug (RegName r);
    // method RF_State temp_read_state ;
    method Action temp_readAll;
    method Action write_rd (RegName rd, WordXL rd_val) ;
@@ -54,6 +55,10 @@ module mkCPU_RegFile (CPU_RegFile_IFC);
 
    method WordXL read_rs2 (RegName rs2);
       return ((rs2 == 0) ? 0 : regfile.sub (rs2));
+   endmethod
+
+   method WordXL read_debug (RegName r);
+      return ((r ==0) ? 0 : regfile.sub(r));
    endmethod
 
    method Action write_rd (RegName rd, WordXL rd_val);
