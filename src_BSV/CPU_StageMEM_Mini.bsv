@@ -24,6 +24,8 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
     method Action run(Data_EX_MEM data_ex_mem);
 
         //接收EX级传过来的信息
+        let valid_instr = data_ex_mem.valid_instr;
+
         let pc = data_ex_mem.pc;
         let rd = data_ex_mem.rd;
         let f3 = data_ex_mem.f3;
@@ -31,18 +33,25 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
         let addr = data_ex_mem.addr;
         let op_stageMEM = data_ex_mem.op_stageMEM;
 
-        Data_MEM_WB rv = Data_MEM_WB { rd_valid:False,
+        Data_MEM_WB rv = Data_MEM_WB { valid_instr:valid_instr,
+                                       rd_valid:False,
                                        rd:rd,
                                        rd_val:val };
-                                    
+ 
+        //如果指令无效，强行置为不写存储，不写寄存器
+        if(valid_instr==False) op_stageMEM = OP_StageMEM_NONE;
+
+        //无效指令，和，后两级不用的指令，如BEQ
         if(op_stageMEM == OP_StageMEM_NONE)
         begin
             rv = Data_MEM_WB { rd_valid : False };
         end
+
         else if(op_stageMEM == OP_StageMEM_ALU)
         begin
             rv = Data_MEM_WB { rd_valid : True};
         end
+
         else if(op_stageMEM == OP_StageMEM_LD)
         begin
             case(f3)
@@ -69,6 +78,7 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
                     end
             endcase
         end
+
         else if(op_stageMEM == OP_StageMEM_ST)
         begin
             case(f3)

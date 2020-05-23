@@ -14,6 +14,8 @@ module mkCPU_StageEX(CPU_StageEX_IFC);
 
     function Data_EX_MEM fv_alu(Data_ID_EX data_id_ex);
 
+        let valid_instr = data_id_ex.valid_instr;
+
         let pc = data_id_ex.pc;
         let di = data_id_ex.decoded_instr;
         let rs1_val = data_id_ex.rs1_val;
@@ -35,6 +37,7 @@ module mkCPU_StageEX(CPU_StageEX_IFC);
         //return value基本值，后面只需要改需要改的部分
         Data_EX_MEM rv = Data_EX_MEM{pc:pc,
                              op_stageMEM:?,
+                             valid_instr:valid_instr,//指令是否有效
                              f3:f3, //仅用于Load和Store指令
                              val:?,
                              addr:?,

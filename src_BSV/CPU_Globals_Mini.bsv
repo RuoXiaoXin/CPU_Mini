@@ -2,20 +2,19 @@ package CPU_Globals_Mini;
 
 import ISA_Decls_Mini ::*;
 
-
-// Integer imemSize = 1024;
 Integer dmemSize = 1024;
 
 typedef struct 
 {
-    Addr    pc;
-    Instr   instr;
+    Addr        pc;
+    Instr       instr;
+    Bool        valid_instr;//是否被清空，置为NOP指令
 } Data_IF_ID deriving (Bits,FShow);
 
 typedef struct
 {
-    Bool branch_EN;
-    Addr branch_target;
+    Bool        branch_EN;
+    Addr        branch_target;
 } Data_Branch deriving (Bits,FShow);
 
 typedef struct
@@ -24,6 +23,7 @@ typedef struct
     Decoded_Instr     decoded_instr;
     WordXL            rs1_val;
     WordXL            rs2_val;
+    Bool              valid_instr;//是否被清空，置为NOP指令
 } Data_ID_EX deriving (Bits,FShow);
 
 typedef enum
@@ -43,13 +43,15 @@ typedef struct
     WordXL          val;    //写入MEM的数据：来自于ALU，RF，Imm等
     WordXL          addr;   //Store指令要用的地址
     RegName         rd;
+    Bool            valid_instr;//是否被清空，置为NOP指令
 } Data_EX_MEM deriving (Bits,FShow);
 
 typedef struct
 {
-    Bool    rd_valid;
-    RegName rd;
-    WordXL  rd_val;
+    Bool        rd_valid;
+    RegName     rd;
+    WordXL      rd_val;
+    Bool        valid_instr;//是否被清空，置为NOP指令
 } Data_MEM_WB deriving (Bits,FShow);
 
 endpackage

@@ -66,10 +66,6 @@ module mkCPU_RegFile (CPU_RegFile_IFC);
       $display("RegFile:write %0d in %0d",rd_val,rd);
    endmethod
 
-   // method RF_State temp_read_state;
-   //    return rg_state;
-   // endmethod
-
 endmodule
 
 endpackage

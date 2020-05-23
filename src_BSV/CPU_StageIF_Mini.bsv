@@ -22,16 +22,26 @@ module mkCPU_StageIF (CPU_StageIF_IFC);
         let branch_target = br.branch_target;
         let pc_temp = ?;
 
-        if(branch_EN==True)
-            begin pc_temp = branch_target; $display("IF:branch taken");$display("IF:branch target is %b",branch_target); end
+        Bool valid_instr = True;
+
+        if(branch_EN==True)//判断是否分支
+            begin 
+            pc_temp = branch_target; 
+            valid_instr = False;
+            $display("IF:branch taken");
+            $display("IF:branch target is %b",branch_target); 
+            end
         else
-            begin pc_temp = reg_pc; $display("IF:branch untaken"); end
-        
-        let instr = { imem.sub(pc_temp),imem.sub(pc_temp+1),imem.sub(pc_temp+2),imem.sub(pc_temp+3) };
+            begin 
+            pc_temp = reg_pc; 
+            $display("IF:branch untaken"); 
+            end
+    
+        let instr = { imem.sub(pc_temp),imem.sub(pc_temp+1),imem.sub(pc_temp+2),imem.sub(pc_temp+3) };//读imem
 
         $display("pc is %b",pc_temp);
-        reg_pc <= pc_temp + 4;
-        reg_if_id <= Data_IF_ID{ pc:pc_temp+4,instr:instr };
+        reg_pc <= pc_temp + 4;//写pc寄存器
+        reg_if_id <= Data_IF_ID{ valid_instr:valid_instr,pc:pc_temp+4,instr:instr };//写if_id流水线寄存器
     endmethod
 
     method Data_IF_ID out;

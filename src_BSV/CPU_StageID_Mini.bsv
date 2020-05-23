@@ -58,7 +58,8 @@ module mkCPU_StageID #(CPU_RegFile_IFC regfile) (CPU_StageID_IFC);
 
         $display("ID:Branch_EN is ",branch_EN);
         reg_branch <= Data_Branch{ branch_EN:branch_EN,branch_target:branch_target };        
-        reg_id_ex <= Data_ID_EX{pc:pc,
+        reg_id_ex <= Data_ID_EX{valid_instr:True,
+                                pc:pc,
                                 decoded_instr:decoded_instr,
                                 rs1_val:rs1_val,
                                 rs2_val:rs2_val};
