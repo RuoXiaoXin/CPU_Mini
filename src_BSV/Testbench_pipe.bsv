@@ -23,7 +23,8 @@ module mkTestbench_pipe(Empty);
     rule pipe;
         $display("**************************************************************************");
         $display("1:fetch");
-        s1.run;
+        $display("branch_EN is ",s2.out_branch.branch_EN);
+        s1.run(s2.out_branch);
 
         $display("2:decode");
         $display("instr:%b",s1.out.instr);

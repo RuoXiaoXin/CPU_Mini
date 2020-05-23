@@ -14,8 +14,8 @@ typedef struct
 
 typedef struct
 {
-    Bit#(1) branch_EN;
-    Addr new_pc;
+    Bool branch_EN;
+    Addr branch_target;
 } Data_Branch deriving (Bits,FShow);
 
 typedef struct

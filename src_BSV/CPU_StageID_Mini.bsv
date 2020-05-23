@@ -7,11 +7,13 @@ import CPU_RegFile_Mini ::*;
 interface CPU_StageID_IFC; 
     method Action run(Data_IF_ID data_if_id);
     method Data_ID_EX out;
+    method Data_Branch out_branch;
 endinterface
 
 module mkCPU_StageID #(CPU_RegFile_IFC regfile) (CPU_StageID_IFC);
     
     Reg #(Data_ID_EX) reg_id_ex <- mkRegU;
+    Reg #(Data_Branch) reg_branch <- mkRegU;
 
     method Action run(Data_IF_ID data_if_id);
         let pc = data_if_id.pc;
@@ -29,35 +31,30 @@ module mkCPU_StageID #(CPU_RegFile_IFC regfile) (CPU_StageID_IFC);
 
         IntXL rs1_val_s = unpack(rs1_val);
         IntXL rs2_val_s = unpack(rs2_val);
-        
-        //分支指令有问题，需要修改
-        /*
+
+        let branch_EN = False;
+        let branch_target = ? ;
+                
         if(op==op_BRANCH)
-        $display("Branch Instr");
         begin
+            $display("ID:Branch Instr");
+
             let instr_SB_imm13 = decoded_instr.imm13_SB;
-            Addr new_pc = pc + signExtend(instr_SB_imm13);
+            let branch_target = pc + signExtend(instr_SB_imm13);
 
             case(f3)
-                f3_BEQ  : branch_EN = (rs1_val_s == rs2_val_s) ? 1'b1  : 1'b0 ;
-                f3_BNE  : branch_EN = (rs1_val_s == rs2_val_s) ? 1'b0 : 1'b1  ;
-                f3_BLT  : branch_EN = (rs1_val_s <  rs2_val_s) ? 1'b1  : 1'b0 ;
-                f3_BGE  : branch_EN = (rs1_val_s >= rs2_val_s) ? 1'b1  : 1'b0 ;
-                f3_BLTU : branch_EN = (rs1_val   < rs2_val)    ? 1'b1  : 1'b0 ;
-                f3_BGEU : branch_EN = (rs1_val  <= rs2_val)    ? 1'b1  : 1'b0 ;
+                f3_BEQ  : branch_EN = (rs1_val_s == rs2_val_s) ? True  : False ;
+                f3_BNE  : branch_EN = (rs1_val_s == rs2_val_s) ? False : True  ;
+                f3_BLT  : branch_EN = (rs1_val_s <  rs2_val_s) ? True  : False ;
+                f3_BGE  : branch_EN = (rs1_val_s >= rs2_val_s) ? True  : False ;
+                f3_BLTU : branch_EN = (rs1_val   < rs2_val)    ? True  : False ;
+                f3_BGEU : branch_EN = (rs1_val  <= rs2_val)    ? True  : False ;
             endcase
 
-            if(branch_EN == 1'b1)
-            begin
-                $display("BEQ instr:branch_EN is %b",branch_EN);
-            end
+        end
 
-            else if(branch_EN == 1'b0)
-            begin
-                $display("BEQ instr:branch_EN is %b",branch_EN);
-            end
-        end*/
-                
+        $display("ID:Branch_EN is ",branch_EN);
+        reg_branch <= Data_Branch{ branch_EN:branch_EN,branch_target:branch_target };        
         reg_id_ex <= Data_ID_EX{pc:pc,
                                 decoded_instr:decoded_instr,
                                 rs1_val:rs1_val,
@@ -66,6 +63,10 @@ module mkCPU_StageID #(CPU_RegFile_IFC regfile) (CPU_StageID_IFC);
 
     method Data_ID_EX out;
         return reg_id_ex;
+    endmethod
+
+    method Data_Branch out_branch;
+        return reg_branch;
     endmethod
 
 endmodule
