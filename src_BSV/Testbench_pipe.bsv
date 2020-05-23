@@ -31,6 +31,8 @@ module mkTestbench_pipe(Empty);
         s2.run(s1.out);
 
         $display("3:execute");
+        $display("rs1_val:%b",s2.out.rs1_val);
+        $display("rs2_val:%b",s2.out.rs2_val);
         $display("rs1_val:%0d",s2.out.rs1_val);
         $display("rs2_val:%0d",s2.out.rs2_val);
         s3.run(s2.out);
@@ -38,6 +40,8 @@ module mkTestbench_pipe(Empty);
         $display("4:mem");
         $display("addr:%0d",s3.out.addr);
         $display("val :%0d",s3.out.val);
+        $display("addr:%b",s3.out.addr);
+        $display("val :%b",s3.out.val);
         s4.run(s3.out);
 
         $display("5:write back");
@@ -49,7 +53,7 @@ module mkTestbench_pipe(Empty);
 
     endrule
 
-    rule done(step==31);
+    rule done(step==20);
         $finish;
     endrule
 

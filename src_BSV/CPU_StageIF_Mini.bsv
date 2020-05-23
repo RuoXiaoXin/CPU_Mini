@@ -14,7 +14,7 @@ module mkCPU_StageIF (CPU_StageIF_IFC);
     
     Reg #(Addr) reg_pc <- mkReg(0);
     Reg #(Data_IF_ID) reg_if_id <- mkRegU;
-    RegFile #(Addr,Bit#(8)) imem <- mkRegFileFullLoad("imem_add.txt");//指令存储器，字节寻址
+    RegFile #(Addr,Bit#(8)) imem <- mkRegFileFullLoad("imem_beq.txt");//指令存储器，字节寻址
 
     method Action run(Data_Branch br);
 
@@ -23,7 +23,7 @@ module mkCPU_StageIF (CPU_StageIF_IFC);
         let pc_temp = ?;
 
         if(branch_EN==True)
-            begin pc_temp = branch_target; $display("IF:branch taken"); end
+            begin pc_temp = branch_target; $display("IF:branch taken");$display("IF:branch target is %b",branch_target); end
         else
             begin pc_temp = reg_pc; $display("IF:branch untaken"); end
         

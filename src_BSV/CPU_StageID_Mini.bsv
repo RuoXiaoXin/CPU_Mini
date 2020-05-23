@@ -23,24 +23,27 @@ module mkCPU_StageID #(CPU_RegFile_IFC regfile) (CPU_StageID_IFC);
         let rs1 = decoded_instr.rs1;
         let rs2 = decoded_instr.rs2;
 
+        let instr_SB_imm13 = decoded_instr.imm13_SB;
+
         let op = decoded_instr.opcode;
         let f3 = decoded_instr.funct3;
 
         let rs1_val = regfile.read_rs1(rs1);
         let rs2_val = regfile.read_rs2(rs2);
 
+        // IntXL pc_s = unpack(pc);
         IntXL rs1_val_s = unpack(rs1_val);
         IntXL rs2_val_s = unpack(rs2_val);
-
-        let branch_EN = False;
-        let branch_target = ? ;
+        
+        Bool branch_EN = False;
+        Addr branch_target = ? ;
                 
         if(op==op_BRANCH)
         begin
+            branch_target = unpack(pc + signExtend(instr_SB_imm13));
+            
             $display("ID:Branch Instr");
-
-            let instr_SB_imm13 = decoded_instr.imm13_SB;
-            let branch_target = pc + signExtend(instr_SB_imm13);
+            $display("ID:Branch Target is %b",branch_target);
 
             case(f3)
                 f3_BEQ  : branch_EN = (rs1_val_s == rs2_val_s) ? True  : False ;
