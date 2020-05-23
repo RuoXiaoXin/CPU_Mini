@@ -48,7 +48,6 @@ function  Bit #(20)  instr_U_imm20  (Instr x);
    return x [31:12];
 endfunction
 
-//这是J型指令的立即数格式，注意末尾已经补0了，相当于左移了
 function  Bit #(21)  instr_UJ_imm21 (Instr x);
    return { x [31], x [19:12], x [20], x [30:21], 1'b0 };
 endfunction

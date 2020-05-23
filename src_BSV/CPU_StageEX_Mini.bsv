@@ -28,6 +28,7 @@ module mkCPU_StageEX(CPU_StageEX_IFC);
 
         let imm12_I = di.imm12_I;
         let imm12_S = di.imm12_S;
+        let imm20_U = di.imm20_U;
 
         IntXL rs1_val_s = unpack(rs1_val);
         IntXL rs2_val_s = unpack(rs2_val);
@@ -42,8 +43,17 @@ module mkCPU_StageEX(CPU_StageEX_IFC);
                              val:?,
                              addr:?,
                              rd:rd};
-        
-        if(op==op_OP)
+        if(op==op_LUI)
+        begin
+            result =  signExtend(imm20_U) << 12;
+            rv = Data_EX_MEM { op_stageMEM:OP_StageMEM_ALU,valid_instr:valid_instr,val:result };
+        end
+        else if(op==op_AUIPC)
+        begin
+            result = (signExtend(imm20_U)<<12) + pc;
+            rv = Data_EX_MEM { op_stageMEM:OP_StageMEM_ALU,valid_instr:valid_instr,val:result };
+        end
+        else if(op==op_OP)
         begin
             case({f7,f3})
             f10_ADD  : result = pack(rs1_val_s + rs2_val_s);
@@ -109,6 +119,9 @@ module mkCPU_StageEX(CPU_StageEX_IFC);
         else if(op==op_BRANCH)
             rv = Data_EX_MEM { op_stageMEM : OP_StageMEM_NONE ,valid_instr:valid_instr};
         
+        else if(op==op_JAL || op==op_JALR)
+            rv = Data_EX_MEM { op_stageMEM :OP_StageMEM_ALU,val:pc,valid_instr:valid_instr };
+
         return rv;
     
     endfunction

@@ -57,7 +57,8 @@ module mkTestbench_pipe(Empty);
 
     endrule
 
-    rule done(step==40);
+    //15拍基本就跑完了，肯定后面多几拍，取到的指令是默认值
+    rule done(step==15);
         $finish;
     endrule
 
