@@ -20,6 +20,7 @@ module mkCPU_StageWB #(CPU_RegFile_IFC regfile) (CPU_StageWB_IFC);
 
         if(rd_valid==True && valid_instr==True)//避免被清除的指令写寄存器
         begin
+            $display("write %0d in %0d",rd_val,rd);
             regfile.write_rd(rd,rd_val);     
         end
     endmethod

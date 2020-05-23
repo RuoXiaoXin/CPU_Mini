@@ -28,32 +28,36 @@ module mkTestbench_pipe(Empty);
 
         $display("2:decode");
         $display("instr:%b",s1.out.instr);
+        $display("valid_instr:%b",s1.out.valid_instr);
         s2.run(s1.out);
 
         $display("3:execute");
         $display("rs1_val:%b",s2.out.rs1_val);
         $display("rs2_val:%b",s2.out.rs2_val);
-        $display("rs1_val:%0d",s2.out.rs1_val);
-        $display("rs2_val:%0d",s2.out.rs2_val);
+        // $display("rs1_val:%0d",s2.out.rs1_val);
+        // $display("rs2_val:%0d",s2.out.rs2_val);
+        $display("valid_instr:%b",s2.out.valid_instr);
         s3.run(s2.out);
 
         $display("4:mem");
-        $display("addr:%0d",s3.out.addr);
-        $display("val :%0d",s3.out.val);
+        // $display("addr:%0d",s3.out.addr);
+        // $display("val :%0d",s3.out.val);
         $display("addr:%b",s3.out.addr);
         $display("val :%b",s3.out.val);
+        $display("valid_instr:%b",s3.out.valid_instr);
         s4.run(s3.out);
 
-        $display("5:write back");
-        $display("rd_valid:%b",s4.out.rd_valid);
-        $display("if valid,write %0d in %0d",s4.out.rd_val,s4.out.rd);
+        $display("5:write back");//写回级的打印信息在WB模块里
+        // $display("rd_valid:%b",s4.out.rd_valid);
+        // $display("if valid,write %0d in %0d",s4.out.rd_val,s4.out.rd);
+        $display("valid_instr:%b",s4.out.valid_instr);
         s5.run(s4.out);
 
         step <= step + 1;
 
     endrule
 
-    rule done(step==20);
+    rule done(step==40);
         $finish;
     endrule
 

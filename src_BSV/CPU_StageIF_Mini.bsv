@@ -14,7 +14,7 @@ module mkCPU_StageIF (CPU_StageIF_IFC);
     
     Reg #(Addr) reg_pc <- mkReg(0);
     Reg #(Data_IF_ID) reg_if_id <- mkRegU;
-    RegFile #(Addr,Bit#(8)) imem <- mkRegFileFullLoad("imem_beq.txt");//指令存储器，字节寻址
+    RegFile #(Addr,Bit#(8)) imem <- mkRegFileFullLoad("imem_beq2.txt");//指令存储器，字节寻址
 
     method Action run(Data_Branch br);
 
@@ -27,7 +27,6 @@ module mkCPU_StageIF (CPU_StageIF_IFC);
         if(branch_EN==True)//判断是否分支
             begin 
             pc_temp = branch_target; 
-            valid_instr = False;
             $display("IF:branch taken");
             $display("IF:branch target is %b",branch_target); 
             end

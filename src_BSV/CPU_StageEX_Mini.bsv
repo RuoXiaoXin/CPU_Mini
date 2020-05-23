@@ -60,6 +60,7 @@ module mkCPU_StageEX(CPU_StageEX_IFC);
 
             rv = Data_EX_MEM {  //pc:pc,
                                 //rd:rd,
+                                valid_instr:valid_instr,
                                 op_stageMEM : OP_StageMEM_ALU,
                                 val : result };
     
@@ -84,6 +85,7 @@ module mkCPU_StageEX(CPU_StageEX_IFC);
 
             rv = Data_EX_MEM {  //pc:pc,
                                 // rd:rd,
+                                valid_instr:valid_instr,
                                 op_stageMEM : OP_StageMEM_ALU,
                                 val : result };
 
@@ -93,6 +95,7 @@ module mkCPU_StageEX(CPU_StageEX_IFC);
             //地址值都是这么计算的
             addr = pack(rs1_val_s + unpack(signExtend(imm12_I)));
             rv = Data_EX_MEM { op_stageMEM : OP_StageMEM_LD,
+                               valid_instr:valid_instr,
                                addr : addr };
         end
         else if(op==op_STORE)
@@ -100,10 +103,11 @@ module mkCPU_StageEX(CPU_StageEX_IFC);
             addr = pack(rs1_val_s + unpack(signExtend(imm12_S)));
             rv = Data_EX_MEM { op_stageMEM : OP_StageMEM_ST,
                                addr : addr,
+                               valid_instr:valid_instr,
                                val  : rs2_val };
         end
         else if(op==op_BRANCH)
-            rv = Data_EX_MEM { op_stageMEM : OP_StageMEM_NONE };
+            rv = Data_EX_MEM { op_stageMEM : OP_StageMEM_NONE ,valid_instr:valid_instr};
         
         return rv;
     
