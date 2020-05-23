@@ -99,8 +99,8 @@ module mkCPU_StageEX(CPU_StageEX_IFC);
                                addr : addr,
                                val  : rs2_val };
         end
-        // else if(op==)//
-
+        else if(op==op_BRANCH)
+            rv = Data_EX_MEM { op_stageMEM : OP_StageMEM_NONE };
         
         return rv;
     

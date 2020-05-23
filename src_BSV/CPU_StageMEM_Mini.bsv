@@ -34,8 +34,12 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
         Data_MEM_WB rv = Data_MEM_WB { rd_valid:False,
                                        rd:rd,
                                        rd_val:val };
-
-        if(op_stageMEM == OP_StageMEM_ALU)
+                                    
+        if(op_stageMEM == OP_StageMEM_NONE)
+        begin
+            rv = Data_MEM_WB { rd_valid : False };
+        end
+        else if(op_stageMEM == OP_StageMEM_ALU)
         begin
             rv = Data_MEM_WB { rd_valid : True};
         end
@@ -53,6 +57,7 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
             f3_LW :begin
                         let load_data = {dmem3.sub(addr),dmem2.sub(addr),dmem1.sub(addr),dmem0.sub(addr)};
                         rv = Data_MEM_WB { rd_valid:True,rd_val:load_data };
+                        $display("LW:addr is %0d, data is %0d",addr,load_data);
                     end
             f3_LBU: begin
                         let load_data = dmem0.sub(addr);
@@ -71,19 +76,27 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
                         //这里得用地址做一下取余操作，判断是哪个字节数组的
                         //dmem.upd(addr,val); 
                         let temp = addr % 'd4;
+                        let addr_byte = addr / 'd4;
+                        // $display("SB:");
                         case(temp)
-                            0:dmem0.upd(addr,val[7:0]);
-                            1:dmem1.upd(addr,val[7:0]);
-                            2:dmem2.upd(addr,val[7:0]);
-                            3:dmem3.upd(addr,val[7:0]);
+                            0:begin dmem0.upd(addr_byte,val[7:0]); $display("dmem0.upd(%0d,%b)",addr_byte,val[7:0]); end
+                            1:begin dmem1.upd(addr_byte,val[7:0]); $display("dmem1.upd(%0d,%b)",addr_byte,val[7:0]); end
+                            2:begin dmem2.upd(addr_byte,val[7:0]); $display("dmem2.upd(%0d,%b)",addr_byte,val[7:0]); end
+                            3:begin dmem3.upd(addr_byte,val[7:0]); $display("dmem3.upd(%0d,%b)",addr_byte,val[7:0]); end
                         endcase
                         rv = Data_MEM_WB { rd_valid:False };
                     end                                                                      
             f3_SH:  begin
                         let temp = addr % 'd2;
                         case(temp)
-                            0:dmem0.upd(addr,val[7:0]);
-                            1:dmem1.upd(addr,val[15:8]);
+                            0:begin
+                                dmem0.upd(addr,val[7:0]);
+                                dmem1.upd(addr,val[15:8]);
+                              end                                       
+                            1:begin
+                                dmem2.upd(addr,val[23:16]);
+                                dmem3.upd(addr,val[31:24]);
+                              end
                         endcase
                         rv = Data_MEM_WB { rd_valid:False };
                     end

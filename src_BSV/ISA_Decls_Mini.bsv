@@ -40,7 +40,6 @@ function  Bit #(12)  instr_S_imm12  (Instr x);
 endfunction
 
 //这是B型指令的立即数格式
-//不太理解为什么要先左移一位再执行？？？
 function  Bit #(13)  instr_SB_imm13 (Instr x);
    return { x [31], x [7], x [30:25], x [11:8], 1'b0 };
 endfunction

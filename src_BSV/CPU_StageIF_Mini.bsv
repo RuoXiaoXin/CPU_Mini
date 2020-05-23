@@ -5,50 +5,27 @@ import RegFile ::*;
 import ISA_Decls_Mini ::*;
 import CPU_Globals_Mini ::*;
 
-interface CPU_PC_IFC;
-    method Action in(Addr pc);//外部写入新的pc
-    method Addr out;
-    method Action incr;
-endinterface
-
 interface CPU_StageIF_IFC;
-    method Action init;
-    method Action run(Addr pc_start);
+    method Action run;
     method Data_IF_ID out;
 endinterface
 
-module mkCPU_PC(CPU_PC_IFC);
-
-    Reg #(Addr) reg_pc <- mkRegU;
-
-    method Action in(Addr pc);
-        reg_pc <= pc;
-    endmethod
-
-    method Addr out;
-        return reg_pc;
-    endmethod
-
-    method Action incr;
-        reg_pc <= reg_pc + 4;
-    endmethod
-
-endmodule
-
-
-module mkCPU_StageIF(CPU_StageIF_IFC);
-
-    //指令存储器，字节寻址
-    RegFile #(Addr,Bit#(8)) imem <- mkRegFileFullLoad("imem_store.txt");
-
+module mkCPU_StageIF (CPU_StageIF_IFC);
+    
+    Reg #(Addr) reg_pc <- mkReg(0);
     Reg #(Data_IF_ID) reg_if_id <- mkRegU;
+    RegFile #(Addr,Bit#(8)) imem <- mkRegFileFullLoad("imem_add.txt");//指令存储器，字节寻址
 
-    //*************************本模块***********************
+    method Action run;
 
-    method Action run(Addr pc);
-        let instr = {imem.sub(pc),imem.sub(pc+1),imem.sub(pc+2),imem.sub(pc+3)};
-        reg_if_id <= Data_IF_ID{pc:pc,instr:instr};
-        $display("IF Module:pc is %b",pc);
+        //这个读的是上一拍写的寄存器，顺序时永远从reg_pc里面读
+        //ID级送回分支时，从reg_target里面读
+        let pc_temp = reg_pc;
+        let instr = { imem.sub(pc_temp),imem.sub(pc_temp+1),imem.sub(pc_temp+2),imem.sub(pc_temp+3) };
+        //写reg_pc寄存器
+        $display("pc is %b",pc_temp);
+        reg_pc <= pc_temp + 4;
+        reg_if_id <= Data_IF_ID{ pc:pc_temp+4,instr:instr };
     endmethod
 
     method Data_IF_ID out;

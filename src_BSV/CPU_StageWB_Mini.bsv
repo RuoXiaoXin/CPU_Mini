@@ -14,11 +14,11 @@ module mkCPU_StageWB #(CPU_RegFile_IFC regfile) (CPU_StageWB_IFC);
         let rd = data_mem_wb.rd;
         let rd_val = data_mem_wb.rd_val;
         let rd_valid = data_mem_wb.rd_valid;
-        $display("rd_valid is ",rd_valid);
+        // $display("rd_valid is ",rd_valid);
         if(rd_valid==True)
         begin
             regfile.write_rd(rd,rd_val);     
-            $display("WB Module:write %0d in %0d",rd_val,rd);
+            // $display("WB Module:write %0d in %0d",rd_val,rd);
         end
     endmethod
     

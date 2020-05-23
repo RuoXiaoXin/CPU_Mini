@@ -14,6 +14,12 @@ typedef struct
 
 typedef struct
 {
+    Bit#(1) branch_EN;
+    Addr new_pc;
+} Data_Branch deriving (Bits,FShow);
+
+typedef struct
+{
     Addr              pc;
     Decoded_Instr     decoded_instr;
     WordXL            rs1_val;
@@ -25,7 +31,8 @@ typedef enum
     //除了LD，ST都选择这个
     OP_StageMEM_ALU,//写RF，无MEM
     OP_StageMEM_LD,//写RF，读MEM
-    OP_StageMEM_ST//写MEM
+    OP_StageMEM_ST,//写MEM
+    OP_StageMEM_NONE
 } OP_StageMEM deriving (Bits,FShow,Eq);
 
 typedef struct
