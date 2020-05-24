@@ -32,12 +32,12 @@ module mkTestbench_pipe(Empty);
         s2.run(s1.out);
 
         $display("3:execute");
-        $display("rs1_val:%b",s2.out.rs1_val);
-        $display("rs2_val:%b",s2.out.rs2_val);
+        $display("rs1_val from RF:%b",s2.out.rs1_val);
+        $display("rs2_val from RF:%b",s2.out.rs2_val);
         // $display("rs1_val:%0d",s2.out.rs1_val);
         // $display("rs2_val:%0d",s2.out.rs2_val);
         $display("valid_instr:%b",s2.out.valid_instr);
-        s3.run(s2.out);
+        s3.run(s2.out , s4.out_forward);
 
         $display("4:mem");
         // $display("addr:%0d",s3.out.addr);
@@ -58,7 +58,7 @@ module mkTestbench_pipe(Empty);
     endrule
 
     //15拍基本就跑完了，肯定后面多几拍，取到的指令是默认值
-    rule done(step==15);
+    rule done(step==8);
         $finish;
     endrule
 

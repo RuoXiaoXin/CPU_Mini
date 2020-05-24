@@ -8,11 +8,15 @@ import ISA_Decls_Mini ::*;
 interface CPU_StageMEM_IFC;
     method Action run(Data_EX_MEM data_ex_mem);
     method Data_MEM_WB out();
+    method Data_Forward out_forward();
 endinterface
 
 module mkCPU_StageMEM(CPU_StageMEM_IFC);
     
     Reg #(Data_MEM_WB) reg_mem_wb <- mkRegU;
+
+    //旁路信息，MEM级写，表示的是一会的WB级的指令的信息，需要送给EX级，一起判断
+    Reg #(Data_Forward) reg_forward_wb <- mkRegU;
     
     //存储器，字节寻址，【3\2\1\0】表示【32-25\24-17\16-8\7-0】
     //存储器里面的数据是：0000000F=15
@@ -33,6 +37,7 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
         let addr = data_ex_mem.addr;
         let op_stageMEM = data_ex_mem.op_stageMEM;
 
+        Data_Forward f = Data_Forward { rd:rd,rd_val:val,rd_valid:False };
         Data_MEM_WB rv = Data_MEM_WB { valid_instr:valid_instr,
                                        rd_valid:False,
                                        rd:rd,
@@ -44,11 +49,13 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
         //无效指令，和，后两级不用的指令，如BEQ
         if(op_stageMEM == OP_StageMEM_NONE)
         begin
+            f  = Data_Forward{ rd_valid : False };
             rv = Data_MEM_WB { rd_valid : False };
         end
 
         else if(op_stageMEM == OP_StageMEM_ALU)
         begin
+            f  = Data_Forward{ rd_valid : True };
             rv = Data_MEM_WB { rd_valid : True};
         end
 
@@ -58,22 +65,27 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
             f3_LB : begin
                         let load_data = dmem0.sub(addr);
                         rv = Data_MEM_WB { rd_valid :True,rd_val:signExtend(load_data) };
+                        f  = Data_Forward{ rd_valid :True,rd_val:signExtend(load_data) };
                     end
             f3_LH : begin
                         let load_data = { dmem1.sub(addr),dmem0.sub(addr) };
                         rv = Data_MEM_WB { rd_valid :True,rd_val:signExtend(load_data) };
+                        f  = Data_Forward{ rd_valid :True,rd_val:signExtend(load_data) };
                     end
             f3_LW :begin
                         let load_data = {dmem3.sub(addr),dmem2.sub(addr),dmem1.sub(addr),dmem0.sub(addr)};
                         rv = Data_MEM_WB { rd_valid:True,rd_val:load_data };
+                        f  = Data_Forward{ rd_valid:True,rd_val:load_data };
                         $display("LW:addr is %0d, data is %0d",addr,load_data);
                     end
             f3_LBU: begin
                         let load_data = dmem0.sub(addr);
+                        f  = Data_Forward{rd_valid :True,rd_val:zeroExtend(load_data)};
                         rv = Data_MEM_WB { rd_valid :True,rd_val:zeroExtend(load_data) };
                     end
             f3_LHU: begin
                         let load_data = { dmem1.sub(addr),dmem0.sub(addr) };
+                        f  = Data_Forward{ rd_valid :True,rd_val:zeroExtend(load_data) };
                         rv = Data_MEM_WB { rd_valid :True,rd_val:zeroExtend(load_data) };
                     end
             endcase
@@ -81,6 +93,7 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
 
         else if(op_stageMEM == OP_StageMEM_ST)
         begin
+            f = Data_Forward { rd_valid:False };
             case(f3)
             f3_SB:  begin
                         //这里得用地址做一下取余操作，判断是哪个字节数组的
@@ -121,8 +134,15 @@ module mkCPU_StageMEM(CPU_StageMEM_IFC);
             endcase
         end
 
-        reg_mem_wb <= rv;
 
+        //写寄存器
+        reg_forward_wb <= f;
+        reg_mem_wb     <= rv;
+
+    endmethod
+
+    method Data_Forward out_forward;
+        return reg_forward_wb;
     endmethod
 
     method Data_MEM_WB out;

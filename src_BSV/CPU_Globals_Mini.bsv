@@ -26,6 +26,13 @@ typedef struct
     Bool              valid_instr;//是否被清空，置为NOP指令
 } Data_ID_EX deriving (Bits,FShow);
 
+typedef struct
+{
+    Bool        rd_valid;
+    RegName     rd;
+    WordXL      rd_val;
+} Data_Forward deriving (Bits,FShow);
+
 typedef enum
 {
     //除了LD，ST都选择这个
